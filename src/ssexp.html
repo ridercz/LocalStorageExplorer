@@ -1,0 +1,202 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Session Storage Explorer</title>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.2.min.js" type="text/javascript"></script>
+    <style type="text/css">
+        body {
+            background-color: #ddd;
+            color: #000;
+            font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+            font-size: .8em;
+            margin: 0;
+            padding: 0;
+        }
+
+        a:link {
+            color: #99c;
+        }
+
+        a:visited {
+            color: #99a;
+        }
+
+        a:hover {
+            color: #33f;
+        }
+
+        #container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            margin: 20px 50px 0 50px;
+            padding: 20px;
+            font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+            font-weight: lighter;
+            color: #fff;
+            background: #1e5799; /* Old browsers */
+            background: -moz-linear-gradient(left, #1e5799 0, #2989d8 50%, #207cca 51%, #7db9e8 100%); /* FF3.6+ */
+            background: -webkit-gradient(linear, left top, right top, color-stop(0,#1e5799), color-stop(50%,#2989d8), color-stop(51%,#207cca), color-stop(100%,#7db9e8)); /* Chrome,Safari4+ */
+            background: -webkit-linear-gradient(left, #1e5799 0,#2989d8 50%,#207cca 51%,#7db9e8 100%); /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(left, #1e5799 0,#2989d8 50%,#207cca 51%,#7db9e8 100%); /* Opera11.10+ */
+            background: -ms-linear-gradient(left, #1e5799 0,#2989d8 50%,#207cca 51%,#7db9e8 100%); /* IE10+ */
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#1e5799', endColorstr='#7db9e8',GradientType=1 ); /* IE6-9 */
+            background: linear-gradient(left, #1e5799 0,#2989d8 50%,#207cca 51%,#7db9e8 100%);
+        }
+
+        #statusLabel {
+            margin: 0 50px;
+            padding: 10px 20px;
+            font-weight: bold;
+            background: #7db9e8; /* Old browsers */
+            background: -moz-linear-gradient(left, #7db9e8 0, #207cca 49%, #2989d8 50%, #1e5799 100%); /* FF3.6+ */
+            background: -webkit-gradient(linear, left top, right top, color-stop(0,#7db9e8), color-stop(49%,#207cca), color-stop(50%,#2989d8), color-stop(100%,#1e5799)); /* Chrome,Safari4+ */
+            background: -webkit-linear-gradient(left, #7db9e8 0,#207cca 49%,#2989d8 50%,#1e5799 100%); /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(left, #7db9e8 0,#207cca 49%,#2989d8 50%,#1e5799 100%); /* Opera11.10+ */
+            background: -ms-linear-gradient(left, #7db9e8 0,#207cca 49%,#2989d8 50%,#1e5799 100%); /* IE10+ */
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7db9e8', endColorstr='#1e5799',GradientType=1 ); /* IE6-9 */
+            background: linear-gradient(left, #7db9e8 0,#207cca 49%,#2989d8 50%,#1e5799 100%); /* W3C */
+        }
+
+        #main {
+            margin: 0 50px;
+            background-color: #fff;
+            padding: 20px;
+        }
+
+        #itemTable {
+            border: 1px solid #ccc;
+            border-collapse: collapse; 
+        }
+
+            #itemTable th {
+                border: 1px solid #ccc;
+                text-align: left;
+                vertical-align: top;
+                padding: .25ex .5ex;
+            }
+
+            #itemTable td {
+                border: 1px solid #ccc;
+                text-align: left;
+                vertical-align: top;
+                padding: .25ex .5ex;
+            }
+
+        .del, .clr {
+            color: #900;
+            cursor: pointer;
+        }
+
+        .add {
+            color: #090;
+            cursor: pointer;
+        }
+
+        #key, #val {
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            width: 100%;
+            min-width: 250px;
+            border: none;
+            background-color: #ffe;
+            font-family: Consolas, 'Courier New', monospace;
+        }
+
+        footer {
+            border-top: 3px solid #1e5799;
+            margin: 0 50px;
+            text-align: center;
+            padding: .5ex 0 0 20px;
+            font-size: 90%;
+            color: #666;
+        }
+
+        .c {
+            font-family: Consolas, 'Courier New', monospace;
+        }
+
+        .bc {
+            font-family: Consolas, 'Courier New', monospace;
+            font-weight: bold;
+        }
+    </style>
+    <script type="text/javascript">
+        $(function () {
+            // Get session storage status
+            var sessionStorageSupported = "sessionStorage" in window && window["sessionStorage"] !== null;
+            var status = $("#statusLabel");
+            if (!sessionStorageSupported) {
+                status.text("This browser does not support session storage.");
+                return;
+            }
+            if (window.sessionStorage.length == 0) {
+                status.text("Session storage is empty.");
+            } else {
+                status.html("<span class='clr'>&#x2716;clear</span> all " + window.sessionStorage.length + " items");
+            }
+
+            // Show all items
+            for (var key in window.sessionStorage) {
+                $("#itemTable").append("<tr><td class='bc'>" + key + "</td><td class='c'>" + window.sessionStorage[key] + "</td><td><span class='del' data-key='" + key + "'>&#x2716;</span></td></tr>");
+            }
+
+            // Clear storage
+            $(".clr").click(function () {
+                if (window.confirm("Are you sure you want to delete everything from session storage?")) {
+                    window.sessionStorage.clear();
+                    window.location.reload();
+                }
+            });
+
+            // Delete item
+            $(".del").attr("title", "Delete item").click(function () {
+                if (window.confirm("Are you sure you want to delete the '" + key + "' item?")) {
+                    window.sessionStorage.removeItem($(this).data("key"));
+                    window.location.reload();
+                }
+            });
+
+            // Set/add item
+            $(".add").click(function () {
+                if ($("#key").val() == "") {
+                    window.alert("Key cannot be empty!");
+                    return;
+                }
+                window.sessionStorage[$("#key").val()] = val = $("#val").val();
+                window.location.reload();
+                
+            });
+
+            $("#main").show();
+        });
+</script>
+</head>
+<body>
+    <div id="container">
+        <h1>Session Storage Explorer</h1>
+        <p id="statusLabel">JavaScript is disabled.</p>
+        <div id="main" style="display: none">
+            <table id="itemTable">
+                <tr>
+                    <th>Key</th>
+                    <th>Value</th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <td>
+                        <input id="key" type="text" /></td>
+                    <td>
+                        <input id="val" type="text" /></td>
+                    <td><span class="add" title="Set or add item">&#x271A;</span></td>
+                </tr>
+            </table>
+            <p>Switch to <a href="lsexp.html">local storage</a>.</p>
+        </div>
+        <footer>&copy; <a href="http://www.rider.cz/">Michal A. Valášek</a> - <a href="http://www.altairis.cz">Altairis</a>, 2011-2015 | <a href="http://www.aspnet.cz/">ASPNET.CZ</a></footer>
+    </div>
+</body>
+</html>
