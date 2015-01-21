@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "LocalStorageExplorer(1)", "http://localhost:54460", "{20D06C33-3C08-4FE4-BBEA-779EABAEB0D6}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "src", "http://localhost:54460", "{20D06C33-3C08-4FE4-BBEA-779EABAEB0D6}"
 	ProjectSection(WebsiteProperties) = preProject
 		UseIISExpress = "true"
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
@@ -28,6 +28,15 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "LocalStorageExplorer(1)", "
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
 		SlnRelativePath = "src\"
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{2F79FAA9-6805-46C9-B03C-3D5EE39743F4}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\Altairis.LocalStorageExplorer.nuspec = .nuget\Altairis.LocalStorageExplorer.nuspec
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+		.nuget\pack.cmd = .nuget\pack.cmd
 	EndProjectSection
 EndProject
 Global
